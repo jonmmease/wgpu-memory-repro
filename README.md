@@ -1,6 +1,10 @@
 ## Overview
 This is a repro for a memory/resource leak using the metal backend of wgpu 0.19. This was not present in version 0.18.
 
+The example is a hybrid of the [learn-wgpu](https://sotrh.github.io/learn-wgpu/) for [Buffers and Indices](https://sotrh.github.io/learn-wgpu/beginner/tutorial4-buffer/) and [Wgpu without a window](https://sotrh.github.io/learn-wgpu/showcase/windowless/). It uses wgpu to render a pentagon and then write it to a PNG file (without opening a window). Then the program attempts to perform this action several hundred times in a loop. 
+
+When running on an M1 mac using the metal backend, this worked fine with wgpu 0.18. But starting in 0.19.0 (and through 0.19.3) this crashes with the backtrace shown below.
+
 ## System specs
 These are the specs of the machine that demonstrates this repro:
 
@@ -76,17 +80,19 @@ stack backtrace:
 note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
 ```
 
+The `Context leak detected, msgtracer returned -1` line looks significant.
+
 ## Run with 0.18
 To run with 0.18, swap comments in `Cargo.toml` from
 
-```
+```toml
 #wgpu = {version = "=0.18.0", default-features = false, features = ["wgsl"]}
 wgpu = {version = "=0.19.3", default-features = false, features = ["wgsl", "metal"]}
 ```
 
 to
 
-```
+```toml
 wgpu = {version = "=0.18.0", default-features = false, features = ["wgsl"]}
 #wgpu = {version = "=0.19.3", default-features = false, features = ["wgsl", "metal"]}
 ```
