@@ -1,0 +1,12 @@
+[package]
+name = "wgpu-memory-repro"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+#wgpu = {version = "=0.18.0", default-features = false, features = ["wgsl"]}
+wgpu = {version = "=0.19.3", default-features = false, features = ["wgsl", "metal"]}
+image = "0.24"
+pollster = "0.3"
+futures-intrusive = "0.4"
+bytemuck = { version = "1.12", features = [ "derive" ] }
